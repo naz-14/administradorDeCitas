@@ -1,0 +1,42 @@
+.cite__cite-wrapper {
+  border-radius: 10px;
+  padding: 3rem;
+  background-color: #2d136f;
+  cursor: pointer;
+  transition: all .4s linear;
+  position: relative;
+  &.completed {
+    &:after {
+      content: '';
+      background-color: rgba(black,.60);
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border-radius: 10px;
+    }
+  }
+  &:hover {
+    box-shadow: 1px 1px 5px 3px #161630 ;
+    transform: scale(1.05);
+  }
+
+  h3 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+  p {
+    margin-bottom: 1rem;
+    font-weight: 400;
+    color: white;
+    span {
+      font-weight: 800;
+    }
+  }
+}
+.cite__buttons-wrapper {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+}

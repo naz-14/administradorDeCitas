@@ -1,0 +1,39 @@
+.cites__form-wrapper {
+  margin-bottom: 4rem;
+}
+.cites__form {
+  @media (min-width: 768px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+.cites__input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  @media (min-width: 768px) {
+    flex: 0 0 calc(50% - 1rem);
+  }
+}
+.cites__label {
+  flex: 0 1 unset;
+  @media (min-width: 768px) {
+    flex: 0 0 max-content;
+  }
+}
+.cites__input {
+  flex: 1 1 100%;
+  @media (min-width: 768px) {
+    flex: 0 1 100%;
+  }
+}
+.cites__submit {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  margin: 1.5rem 0;
+  @media (min-width: 768px) {
+    flex: 1 1 100%;
+  }
+}
