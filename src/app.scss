@@ -1,0 +1,58 @@
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+*, *:after, *:before {
+  box-sizing: inherit;
+}
+body {
+  background: rgb(22,22,48);
+  background: linear-gradient(0deg, rgba(22,22,48,1) 0%, rgba(13,17,93,1) 35%, rgba(45,19,111,1) 100%);
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+h1,h2,h3,h4,p,li,ul,label,input{
+  margin: 0;
+  padding: 0;
+  font-size: 1.8rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 2rem 0;
+}
+.subtitle {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 1rem 0;
+}
+.btn {
+  background: transparent;
+  border: none;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  transition: all .4s linear;
+  color: white;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #2d136f;
+  &:hover {
+    background: #161630;
+  }
+}
+.btn-delete {
+  background-color: #7f0000;
+  &:hover {
+    background-color: darken(#7f0000,10%);
+  }
+}
+.btn-edit {
+  background-color: #004c00;
+  &:hover {
+    background-color: darken(#004c00,10%);
+  }
+}
