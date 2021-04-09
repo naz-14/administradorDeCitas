@@ -1,6 +1,7 @@
 import React from 'react'
 
 import './cite.scss'
+import Button from '../Button/Button'
 
 const Cite = () => {
   return (
@@ -11,8 +12,8 @@ const Cite = () => {
       <p className="cite__email"><span>Correo: </span>pwnaz@mail.com</p>
       <p className="cite__phone"><span>Teléfono: </span>5569636585</p>
       <div className="cite__buttons-wrapper">
-        <button className="btn btn-edit cite__edit">Editar</button>
-        <button className="btn btn-delete cite__delete">Eliminar</button>
+        <Button text={'Editar'} type={'edit'} />
+        <Button text={'Eliminar'} type={'delete'} />
       </div>
     </div>
   )
