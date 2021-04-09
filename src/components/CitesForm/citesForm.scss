@@ -22,7 +22,7 @@
     flex: 0 0 max-content;
   }
 }
-.cites__input {
+.cites__input, .cites__select {
   flex: 1 1 100%;
   @media (min-width: 768px) {
     flex: 0 1 100%;
