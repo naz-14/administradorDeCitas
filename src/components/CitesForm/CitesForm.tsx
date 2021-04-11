@@ -7,9 +7,10 @@ import './citesForm.scss'
 import useForm from '../../hooks/useForm'
 import FormInput from '../FormInput/FormInput'
 import FormSelect from '../FormSelect/FormSelect'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { startCreateCite } from '../../actions/CitesActions'
-import { startCreateTodayCite } from '../../actions/TodayCiteActions'
+import { getBusyHoursOfDay } from '../../helpers/getBusyHoursOfDay'
+import { AppState } from '../../types/states'
 
 export interface DataForm {
   name: string
@@ -32,7 +33,8 @@ type HoursObject = {
 
 const CitesForm = () => {
   const dispatch = useDispatch()
-  const [formValues, handleInputChange] = useForm<DataForm>({
+  const { cites } = useSelector((state:AppState) => state)
+  const [formValues, handleInputChange, reset] = useForm<DataForm>({
     name: '',
     last: '',
     date: '',
@@ -41,9 +43,8 @@ const CitesForm = () => {
     phone: ''
   })
   const [disponibleHours, setDisponibleHours] = useState<HoursObject[]>([])
-
   const handleBusyHours = ({ target }:ChangeEvent<HTMLSelectElement>) => {
-    const busyHours: number[] = [8, 10]
+    const busyHours: number[] = getBusyHoursOfDay({ day: target.value, cites: cites })
     const filteredHours = hours.filter(hour => (!busyHours.includes(hour)))
     setDisponibleHours(():HoursObject[] =>
       (filteredHours.map((hour):HoursObject =>
@@ -78,11 +79,15 @@ const CitesForm = () => {
 
   const citeFormSubmitHandler = (evt: SyntheticEvent) => {
     evt.preventDefault()
-    if (new Date(formValues.date).getTime() === new Date(moment().format('DD-MM-YY')).getTime()) {
-      dispatch(startCreateTodayCite(formValues))
-      return
-    }
     dispatch(startCreateCite(formValues))
+  }
+  const updateBusyHours = (evt: SyntheticEvent) => {
+    const busyHours: number[] = getBusyHoursOfDay({ day: formValues.date, cites: cites })
+    const filteredHours = hours.filter(hour => (!busyHours.includes(hour)))
+    setDisponibleHours(():HoursObject[] =>
+      (filteredHours.map((hour):HoursObject =>
+        ({ value: hour, optionText: hour.toString(), key: uuidv4() }))))
+    reset()
   }
   return (
     <div className="cites__form-wrapper">
@@ -90,7 +95,11 @@ const CitesForm = () => {
       <form
         action="#"
         className="cites__form"
-        onSubmit={citeFormSubmitHandler}
+        onSubmit={(evt) => {
+          citeFormSubmitHandler(evt)
+          updateBusyHours(evt)
+        }
+        }
       >
         <div className="cites__input-wrapper">
           <FormInput
@@ -129,6 +138,7 @@ const CitesForm = () => {
             value={formValues.time}
             defaultOption={'Selecciona una hora'}
             options={disponibleHours}
+            disabled={formValues.date === '0'}
           />
         </div>
         <div className="cites__input-wrapper">
