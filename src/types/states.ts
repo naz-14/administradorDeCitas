@@ -3,10 +3,11 @@ export type CiteObject = {
   name: string
   last: string
   date: string
-  time: number
+  time: string
   email: string
-  phone: number
+  phone: string
 }
 export interface AppState {
   cites: CiteObject[]
+  todayCites: CiteObject[]
 }

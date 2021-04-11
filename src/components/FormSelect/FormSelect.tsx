@@ -37,7 +37,7 @@ const FormSelect = ({ name, txt, labelText, handlers, value, defaultOption, opti
       >
         <option value="">{defaultOption}</option>
         {
-          options.map((dayObject) => (<option value={dayObject.value} key={dayObject.value}>{dayObject.optionText}</option>))
+          options.map((dayObject) => (<option value={dayObject.value} key={dayObject.value}>{name === 'time' ? dayObject.optionText + ':00' : dayObject.optionText}</option>))
         }
       </select>
     </>
