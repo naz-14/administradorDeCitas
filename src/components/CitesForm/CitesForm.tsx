@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { startCreateCite } from '../../actions/CitesActions'
 import { getBusyHoursOfDay } from '../../helpers/getBusyHoursOfDay'
 import { AppState } from '../../types/states'
+import { getBusyDays } from '../../helpers/getBusyDays'
 
 export interface DataForm {
   name: string
@@ -42,44 +43,22 @@ const CitesForm = () => {
     email: '',
     phone: ''
   })
+  let startHour: number = 8
+  const hoursToWork: number = 12
+  const hours: number[] = []
+  for (let i = hoursToWork - 1; i >= 0; i--) {
+    hours.push(startHour)
+    startHour++
+  }
   const [disponibleHours, setDisponibleHours] = useState<HoursObject[]>([])
   const handleBusyHours = ({ target }:ChangeEvent<HTMLSelectElement>) => {
     const busyHours: number[] = getBusyHoursOfDay({ day: target.value, cites: cites })
     const filteredHours = hours.filter(hour => (!busyHours.includes(hour)))
     setDisponibleHours(():HoursObject[] =>
       (filteredHours.map((hour):HoursObject =>
-        ({ value: hour, optionText: hour.toString(), key: uuidv4() }))))
-  }
-  const initialDays: DayObject[] = [{ value: moment().format('DD-MM-YY'), key: uuidv4(), optionText: moment().format('D-MMMM-YY') }]
-  const [dayOptions, setDayOptions] = useState(initialDays)
-  const daysToShowFromNow: number = 30
-  let startHour: number = 8
-  const hoursToWork: number = 12
-  const hours: number[] = []
-  for (let i = hoursToWork; i >= 0; i--) {
-    hours.push(startHour)
-    startHour++
-  }
-  const busyDays: string[] = ['12/4/21', '23/4,21']
-  useEffect(() => {
-    for (let i:number = 1; i <= daysToShowFromNow; i++) {
-      setDayOptions(prevState => ([
-        ...prevState,
-        {
-          value: moment().add(i, 'days').format('DD-MM-YY'),
-          optionText: moment().add(i, 'days').format('D-MMMM-YY'),
-          key: uuidv4()
-        }
-      ]))
-    }
-  }, [])
-  const daysToShow: DayObject[] = dayOptions.filter((dayObject) => {
-    return !busyDays.includes(dayObject.value)
-  })
-
-  const citeFormSubmitHandler = (evt: SyntheticEvent) => {
-    evt.preventDefault()
-    dispatch(startCreateCite(formValues))
+        ({ value: hour, optionText: hour.toString(), key: uuidv4() })
+      ))
+    )
   }
   const updateBusyHours = (evt: SyntheticEvent) => {
     const busyHours: number[] = getBusyHoursOfDay({ day: formValues.date, cites: cites })
@@ -88,6 +67,28 @@ const CitesForm = () => {
       (filteredHours.map((hour):HoursObject =>
         ({ value: hour, optionText: hour.toString(), key: uuidv4() }))))
     reset()
+  }
+  const daysToShowFromNow: number = 30
+  const initialDays: DayObject[] = []
+  const [dayOptions, setDayOptions] = useState(initialDays)
+  useEffect(() => {
+    const dayOptionArray = [{ value: moment().format('DD-MM-YY'), key: uuidv4(), optionText: moment().format('D-MMMM-YY') }]
+    for (let i:number = 1; i <= daysToShowFromNow; i++) {
+      dayOptionArray.push({
+        value: moment().add(i, 'days').format('DD-MM-YY'),
+        optionText: moment().add(i, 'days').format('D-MMMM-YY'),
+        key: uuidv4()
+      })
+    }
+    const busyDays = getBusyDays(dayOptionArray, cites, hoursToWork)
+    const daysToShow: DayObject[] = dayOptionArray.filter((dayObject) => {
+      return !busyDays.includes(dayObject.value)
+    })
+    setDayOptions(daysToShow)
+  }, [cites])
+  const citeFormSubmitHandler = (evt: SyntheticEvent) => {
+    evt.preventDefault()
+    dispatch(startCreateCite(formValues))
   }
   return (
     <div className="cites__form-wrapper">
@@ -127,7 +128,7 @@ const CitesForm = () => {
             handlers={[handleInputChange, handleBusyHours]}
             value={formValues.date}
             defaultOption={'Selecciona un dia'}
-            options={daysToShow} />
+            options={dayOptions} />
         </div>
         <div className="cites__input-wrapper">
           <FormSelect
