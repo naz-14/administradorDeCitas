@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import './cite.scss'
 import Button from '../Button/Button'
@@ -14,8 +15,10 @@ const Cite = ({ name, date, email, id, last, phone, time }:CiteObject) => {
       <p className="cite__email"><span>Correo: </span>{email}</p>
       <p className="cite__phone"><span>Teléfono: </span>{phone}</p>
       <div className="cite__buttons-wrapper">
-        <Button text={'Editar'} type={'edit'} />
-        <Button text={'Eliminar'} type={'delete'} />
+        <Link to={`/edit/${id}`}>
+          <Button text={'Editar'} type={'edit'} />
+        </Link>
+        <Button text={'Eliminar'} type={'delete'}/>
       </div>
     </div>
   )
