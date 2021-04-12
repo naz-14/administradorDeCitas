@@ -14,9 +14,10 @@ interface SelectFormProps {
   value: string
   defaultOption: string
   options: OptionType[]
+  disabled?: boolean
 }
 
-const FormSelect = ({ name, txt, labelText, handlers, value, defaultOption, options }:SelectFormProps) => {
+const FormSelect = ({ name, txt, labelText, handlers, value, defaultOption, options, disabled }:SelectFormProps) => {
   return (
     <>
       <label
@@ -33,11 +34,13 @@ const FormSelect = ({ name, txt, labelText, handlers, value, defaultOption, opti
             handler(event)
           })
         }}
+        id={name}
         value={value}
+        disabled={disabled}
       >
-        <option value="">{defaultOption}</option>
+        <option value="0">{defaultOption}</option>
         {
-          options.map((dayObject) => (<option value={dayObject.value} key={dayObject.value}>{dayObject.optionText}</option>))
+          options.map((dayObject) => (<option value={dayObject.value} key={dayObject.value}>{name === 'time' ? dayObject.optionText + ':00' : dayObject.optionText}</option>))
         }
       </select>
     </>

@@ -2,6 +2,9 @@ import { ChangeEvent, useState } from 'react'
 
 const useForm = <T extends Object>(initState: T) => {
   const [formValues, setFormValues] = useState(initState)
+  const reset = () => {
+    setFormValues(initState)
+  }
   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     setFormValues({
       ...formValues,
@@ -10,7 +13,8 @@ const useForm = <T extends Object>(initState: T) => {
   }
   return [
     formValues,
-    handleInputChange
+    handleInputChange,
+    reset
   ] as const
 }
 
