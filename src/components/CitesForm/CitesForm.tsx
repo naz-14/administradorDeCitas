@@ -1,6 +1,7 @@
-import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, SyntheticEvent, useEffect, useRef, useState } from 'react'
 import moment from 'moment/moment'
 import { v4 as uuidv4 } from 'uuid'
+import { useHistory } from 'react-router-dom'
 
 import './citesForm.scss'
 
@@ -8,10 +9,17 @@ import useForm from '../../hooks/useForm'
 import FormInput from '../FormInput/FormInput'
 import FormSelect from '../FormSelect/FormSelect'
 import { useDispatch, useSelector } from 'react-redux'
-import { startCreateCite } from '../../actions/CitesActions'
+import { startCreateCite, startEditCite } from '../../actions/CitesActions'
 import { getBusyHoursOfDay } from '../../helpers/getBusyHoursOfDay'
 import { AppState } from '../../types/states'
 import { getBusyDays } from '../../helpers/getBusyDays'
+
+interface CitesFormProps {
+  formInitState: DataForm
+  submitAction: 'edit' | 'create'
+  submitText: string
+  citeId?: string
+}
 
 export interface DataForm {
   name: string
@@ -32,17 +40,14 @@ type HoursObject = {
   optionText: string
 }
 
-const CitesForm = () => {
+const CitesForm = ({ formInitState, submitAction, submitText, citeId = '' }:CitesFormProps) => {
+  const history = useHistory()
   const dispatch = useDispatch()
   const { cites } = useSelector((state:AppState) => state)
-  const [formValues, handleInputChange, reset] = useForm<DataForm>({
-    name: '',
-    last: '',
-    date: '',
-    time: '',
-    email: '',
-    phone: ''
-  })
+  const [formValues, handleInputChange, reset] = useForm<DataForm>(formInitState)
+  useEffect(() => {
+    updateBusyHours()
+  }, [])
   let startHour: number = 8
   const hoursToWork: number = 12
   const hours: number[] = []
@@ -60,7 +65,7 @@ const CitesForm = () => {
       ))
     )
   }
-  const updateBusyHours = (evt: SyntheticEvent) => {
+  const updateBusyHours = () => {
     const busyHours: number[] = getBusyHoursOfDay({ day: formValues.date, cites: cites })
     const filteredHours = hours.filter(hour => (!busyHours.includes(hour)))
     setDisponibleHours(():HoursObject[] =>
@@ -86,9 +91,17 @@ const CitesForm = () => {
     })
     setDayOptions(daysToShow)
   }, [cites])
+  const submitButton = useRef<HTMLButtonElement>(null)
+  const prevDate = formInitState.date
   const citeFormSubmitHandler = (evt: SyntheticEvent) => {
     evt.preventDefault()
-    dispatch(startCreateCite(formValues))
+    if (submitAction === 'create') {
+      dispatch(startCreateCite(formValues))
+      reset()
+      return
+    }
+    dispatch(startEditCite(formValues, citeId, prevDate))
+    history.push('/')
   }
   return (
     <div className="cites__form-wrapper">
@@ -98,7 +111,7 @@ const CitesForm = () => {
         className="cites__form"
         onSubmit={(evt) => {
           citeFormSubmitHandler(evt)
-          updateBusyHours(evt)
+          updateBusyHours()
         }
         }
       >
@@ -139,7 +152,7 @@ const CitesForm = () => {
             value={formValues.time}
             defaultOption={'Selecciona una hora'}
             options={disponibleHours}
-            disabled={formValues.date === '0'}
+            disabled={formValues.date === '' || formValues.date === '0'}
           />
         </div>
         <div className="cites__input-wrapper">
@@ -163,9 +176,10 @@ const CitesForm = () => {
         <button
           type="submit"
           className="btn btn-primary cites__submit"
-          id="submitForm"
+          id={`submitForm__${submitAction}`}
+          ref={submitButton}
         >
-          Crear Cita
+          {submitText}
         </button>
       </form>
     </div>

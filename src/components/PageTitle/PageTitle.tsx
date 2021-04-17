@@ -2,10 +2,14 @@ import React from 'react'
 
 import './pageTitle.scss'
 
-const PageTitle = () => {
+interface PageTitleProps {
+  title: string
+}
+
+const PageTitle = ({ title }:PageTitleProps) => {
   return (
     <div className="page-title__wrapper">
-      <h1 className="page-title title">Administrador de Citas</h1>
+      <h1 className="page-title title">{title}</h1>
     </div>
   )
 }

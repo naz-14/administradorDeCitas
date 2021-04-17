@@ -14,7 +14,9 @@ const ListOfCites = () => {
       <h2 className="subtitle">Citas De Hoy</h2>
       <div className="cites__grid">
         {
-          todayCites.map((cite) => (<Cite key={cite.id} {...cite} />))
+          todayCites.length > 0
+            ? todayCites.map((cite) => (<Cite key={cite.id} {...cite} />))
+            : <h2>No hay citas el dia de hoy</h2>
         }
       </div>
     </div>

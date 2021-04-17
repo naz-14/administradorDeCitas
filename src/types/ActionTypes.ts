@@ -6,7 +6,8 @@ export const EDIT__CITE = 'EDIT__CITE'
 export const SET__CITES = 'SET__CITES'
 export const SET__TODAY__CITES = 'SET__TODAY__CITES'
 export const ADD__TODAY__CITE = 'ADD__TODAY__CITE'
-export const REMOVE__TODAY__CITE = 'REMOVE__TODAY__CITE'
+export const EDIT__TODAY__CITE = 'EDIT__TODAY__CITE'
+export const DELETE__TODAY__CITE = 'REMOVE__TODAY__CITE'
 
 export interface CreateCiteActionI {
   type: typeof CREATE__CITE
@@ -15,15 +16,11 @@ export interface CreateCiteActionI {
 
 export interface DeleteCiteActionI {
   type: typeof DELETE__CITE
-  payload: {
-    id: string
-  }
+  payload: string
 }
 export interface EditCiteActionI {
   type: typeof EDIT__CITE
-  payload: {
-    id: string
-  }
+  payload: CiteObject
 }
 
 export interface SetCitesI {
@@ -40,15 +37,17 @@ export interface AddTodayCiteI {
   type: typeof ADD__TODAY__CITE
   payload: CiteObject
 }
-export interface RemoveTodayCiteI {
-  type: typeof REMOVE__TODAY__CITE
-  payload: {
-    id: string
-  }
+export interface EditTodayCiteI {
+  type: typeof EDIT__TODAY__CITE
+  payload: CiteObject
+}
+export interface DeleteTodayCiteI {
+  type: typeof DELETE__TODAY__CITE
+  payload: string
 }
 
 export type CiteActions = CreateCiteActionI | DeleteCiteActionI | EditCiteActionI | SetCitesI
 
-export type TodayActions = SetTodayCitesI | AddTodayCiteI | RemoveTodayCiteI
+export type TodayActions = SetTodayCitesI | AddTodayCiteI | DeleteTodayCiteI | EditTodayCiteI
 
 export type AppActions = CiteActions | TodayActions

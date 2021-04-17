@@ -8,7 +8,20 @@ import ListOfCites from '../ListOfCites/ListOfCites'
 const Cites = () => {
   return (
     <div className="cites__wrapper">
-      <CitesForm />
+      <CitesForm
+        formInitState={
+          {
+            name: '',
+            last: '',
+            date: '',
+            time: '',
+            email: '',
+            phone: ''
+          }
+        }
+        submitText={'Crear cita'}
+        submitAction={'create'}
+      />
       <ListOfCites />
     </div>
   )

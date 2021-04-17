@@ -8,7 +8,7 @@ interface filterAndSortDatesProps {
 export const filterAndSortDates = ({ day, cites }:filterAndSortDatesProps) => {
   let citesOfDay: CiteObject[]
   if (day) {
-    citesOfDay = cites.filter((citesObj) => new Date(citesObj.date).getTime() === new Date(day).getTime())
+    citesOfDay = cites.filter((citesObj) => (citesObj.date === day))
   } else {
     citesOfDay = [...cites]
   }

@@ -17,6 +17,5 @@ export const getBusyDays = (dayOptions: DayObject[], cites: CiteObject[], hoursT
       ocupedDays.push(day)
     }
   })
-  console.log(ocupedDays, 'ocupedDays', dayOptions, 'Day', cites, 'cites')
   return ocupedDays
 }

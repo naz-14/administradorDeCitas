@@ -5,7 +5,7 @@ import React from 'react'
 const CitesAdmin = () => {
   return (
     <>
-      <PageTitle />
+      <PageTitle title={'Administrador de Citas'}/>
       <div className="cites__wrapper">
         <Cites />
       </div>

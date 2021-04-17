@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 import './app.scss'
 
@@ -13,19 +13,20 @@ import CitesEdit from './Views/CitesEdit'
 function App () {
   const dispatch = useDispatch()
   useEffect(() => {
-    const citesLoader = async () => {
+    const setAllCites = async () => {
       const cites = await loadCites()
       dispatch(setCites(cites))
       dispatch(setTodayCites(cites))
     }
-    citesLoader()
+    setAllCites()
   }, [])
   return (
     <div className="App">
       <Router>
         <Switch>
           <Route path='/' exact component={CitesAdmin}/>
-          <Route path={'/edit/:id'} component={CitesEdit}/>
+          <Route path={'/edit/:id'} exact component={CitesEdit}/>
+          <Redirect to={'/'} />
         </Switch>
       </Router>
     </div>

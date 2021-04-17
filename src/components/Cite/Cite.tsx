@@ -4,9 +4,14 @@ import { Link } from 'react-router-dom'
 import './cite.scss'
 import Button from '../Button/Button'
 import { CiteObject } from '../../types/states'
+import { useDispatch } from 'react-redux'
+import { startDeleteCite } from '../../actions/CitesActions'
 
 const Cite = ({ name, date, email, id, last, phone, time }:CiteObject) => {
-  console.log('me renderice', name)
+  const dispatch = useDispatch()
+  const handleDelete = () => {
+    dispatch(startDeleteCite(id, date))
+  }
   return (
     <div className="cite__cite-wrapper" id={id}>
       <h3 className="cite__full-name"><span>Nombre: </span>{`${name} ${last}`}</h3>
@@ -18,7 +23,7 @@ const Cite = ({ name, date, email, id, last, phone, time }:CiteObject) => {
         <Link to={`/edit/${id}`}>
           <Button text={'Editar'} type={'edit'} />
         </Link>
-        <Button text={'Eliminar'} type={'delete'}/>
+        <Button text={'Eliminar'} type={'delete'} handler={handleDelete}/>
       </div>
     </div>
   )

@@ -3,7 +3,6 @@ import { CiteObject } from '../types/states'
 
 export const loadCites = async () => {
   const citesSnap = await db.collection('cites').get()
-  console.log(citesSnap)
   const cites: CiteObject[] = []
   citesSnap.forEach((citeChild) => {
     cites.push({
